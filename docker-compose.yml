@@ -18,6 +18,18 @@ services:
     entrypoint: ./entrypoint.sh
     command: "bin/dev"
 
+  front:
+    image: node:20
+    container_name: front
+    tty: true
+    working_dir: /front
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/front
+    entrypoint: /bin/bash
+    command: -c "npm install && npm run dev -- --host 0.0.0.0"
+
   postgres:
     image: postgres
     environment:
