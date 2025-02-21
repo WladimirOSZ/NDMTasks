@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  api:
+    image: ruby:3.3
+    container_name: api
+    tty: true
+    env_file:
+      - .env
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - rubygems:/usr/local/bundle
+    depends_on:
+      - postgres
+    entrypoint: ./entrypoint.sh
+    command: "bin/dev"
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: primarydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - database:/var/lib/postgresql/data
+
+volumes:
+  rubygems:
+  database:
