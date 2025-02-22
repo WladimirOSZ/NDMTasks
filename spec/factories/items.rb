@@ -4,8 +4,8 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     status { :pending }
 
-    trait :done do
-      status { :done }
+    trait :complete do
+      status { :complete }
     end
   end
 end

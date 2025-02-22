@@ -14,49 +14,51 @@ RSpec.describe 'Create item mutation', type: :request do
     GQL
   end
 
-  describe 'with pending status' do
-    let(:variables) do
-      {
-        input: {
-          name: "Item Name",
-          description: "description",
-          status: 'pending'
+  context 'with valid parameters' do
+    describe 'with pending status' do
+      let(:variables) do
+        {
+          input: {
+            name: "Item Name",
+            description: "description",
+            status: 'pending'
+          }
         }
-      }
+      end
+
+      it 'create a item' do
+        post '/graphql', params: { query: query, variables: variables }
+        json = JSON.parse(response.body)
+        data = json['data']['createItem']
+
+        expect(data).to include(
+          'name' => 'Item Name',
+          'description' => 'description',
+          'status' => 'pending'
+        )
+      end
     end
 
-    it 'create a pending item' do
-      post '/graphql', params: { query: query, variables: variables }
-      json = JSON.parse(response.body)
-      data = json['data']['createItem']
-
-      expect(data).to include(
-        'name' => 'Item Name',
-        'description' => 'description',
-        'status' => 'pending'
-      )
-    end
-  end
-
-  describe 'with done status' do
-    let(:variables) do
-      {
-        input: {
-          name: "Item Name",
-          status: 'done'
+    describe 'with complete status' do
+      let(:variables) do
+        {
+          input: {
+            name: "Item Name",
+            status: 'complete'
+          }
         }
-      }
-    end
+      end
 
-    it 'create a done item' do
-      post '/graphql', params: { query: query, variables: variables }
-      json = JSON.parse(response.body)
-      data = json['data']['createItem']
+      it 'create a item' do
+        post '/graphql', params: { query: query, variables: variables }
+        json = JSON.parse(response.body)
+        data = json['data']['createItem']
 
-      expect(data).to include(
-        'name' => 'Item Name',
-        'status' => 'done'
-      )
+        expect(data).to include(
+          'name' => 'Item Name',
+          'status' => 'complete'
+        )
+      end
     end
   end
 

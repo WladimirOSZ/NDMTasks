@@ -1,6 +1,6 @@
 module Types
   class StatusType < BaseEnum
     value "pending", "Pending status"
-    value "done", "Done status"
+    value "complete", "Complete status"
   end
 end
