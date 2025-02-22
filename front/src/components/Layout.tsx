@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom'
 
 const LayoutComponent = () => {
   return (
     <>
-      <div className="container mx-auto shadow-lg">
+      <div className='container mx-auto shadow-lg'>
         <Outlet />
       </div>
     </>
