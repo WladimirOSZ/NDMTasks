@@ -1,24 +1,77 @@
-# README
+# NDM Tasks - A todo app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Summary
+  - [Summary](#summary)
+  - [Stack Summary](#stack-summary)
+  - [Requirements](#requirements)
+  - [Running the app](#running-the-app)
+  - [Tests](#tests)
+  - [Docs and folder structure](#docs-and-folder-structure)
+---
 
-Things you may want to cover:
 
-* Ruby version
+## Stack Summary
+- Backend:
+  - Ruby on Rails
+  - Postgres
+  - GraphQL
+  - RSpec
 
-* System dependencies
+- Frontend:
+  - React
+  - Apollo Client
+  - Tailwind
+  - MUI
+  - React Hook Form
+  - Jest
 
-* Configuration
+## Requirements
 
-* Database creation
+- There's two ways of running the app:
+  - [Docker](#docker)
+  - [Local](#local)
 
-* Database initialization
+- Docker requirements:
+  - Docker
 
-* How to run the test suite
+- Local requirements:
+ - Ruby 3.3.0
+ - Node 20
 
-* Services (job queues, cache servers, search engines, etc.)
+## Running the app
 
-* Deployment instructions
+### Docker
+```bash
+docker compose up
+```
 
-* ...
+### Local
+
+#### Backend
+```bash
+bundle install
+rails db:create db:migrate
+rails s
+```
+
+#### Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## Tests
+#### Backend
+```bash
+docker compose run api bash
+bundle exec rspec
+```
+#### Frontend
+```bash
+docker compose run frontend bash
+npm test
+```
+
+## Docs and folder structure
+- [DOC](./doc/doc.MD)
