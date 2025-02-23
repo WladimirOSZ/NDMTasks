@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react'
 import HomePage from '../../pages/HomePage'
-import GET_ITEMS from '../../graphql/queries/get_items'
 import { MockedProvider } from '@apollo/client/testing'
+import GET_ITEMS_BY_STATUS from '../../graphql/queries/get_items_by_status'
 
 const emptyMock = [
   {
     request: {
-      query: GET_ITEMS,
+      query: GET_ITEMS_BY_STATUS,
     },
     result: {
       data: {
-        getItems: [],
+        getItemsByStatus: [],
       },
     },
   },
@@ -19,11 +19,11 @@ const emptyMock = [
 const tasksMock = [
   {
     request: {
-      query: GET_ITEMS,
+      query: GET_ITEMS_BY_STATUS,
     },
     result: {
       data: {
-        getItems: [
+        getItemsByStatus: [
           {
             'id': '1',
             'name': 'First Item',
@@ -53,9 +53,6 @@ const tasksMock = [
     },
   },
 ]
-
-
-
 
 describe('HomePage', () => {
   test('renders the page title', async () => {
@@ -88,16 +85,18 @@ describe('HomePage', () => {
 
 
   describe('when there are no tasks', () => {
-    test('renders "No tasks yet" message', async () => {
-      render(
-        <MockedProvider mocks={emptyMock}>
-          <HomePage />
-        </MockedProvider>
-      )
+    describe('and filter is all', () => {
+      test('renders "No tasks yet" message', async () => {
+        render(
+          <MockedProvider mocks={emptyMock}>
+            <HomePage />
+          </MockedProvider>
+        )
 
-      const noTasks = await screen.findByText('No tasks yet.')
+        const noTasks = await screen.findByText('No tasks yet. Create one!')
 
-      expect(noTasks).toBeInTheDocument()
+        expect(noTasks).toBeInTheDocument()
+      })
     })
   })
 

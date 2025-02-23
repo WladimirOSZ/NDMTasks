@@ -3,9 +3,9 @@ export type Item = {
   id: number
   name: string
   description: string
-  status: 'pending' | 'completed'
+  status: ItemStatusType
 }
 
-export type GetItems = {
-  getItems: Item[]
-}
+export type ItemStatusType = 'pending' | 'completed'
+
+export type FilterType = ItemStatusType | 'all'

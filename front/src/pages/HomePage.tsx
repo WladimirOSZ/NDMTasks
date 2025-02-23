@@ -1,21 +1,27 @@
 import AddTaskIcon from '@mui/icons-material/AddTask'
 import AddIcon from '@mui/icons-material/Add'
 import { useQuery } from '@apollo/client'
-import GET_ITEMS from '../graphql/queries/get_items'
-import { GetItems } from '../types/ItemsTypes'
+import { FilterType } from '../types/ItemsTypes'
 import { NoItems } from '../components/NoItems'
 import { useState } from 'react'
 import { ItemCardSkeleton } from '../components/ItemCard/ItemCardSkeleton'
 import { ItemCard } from '../components/ItemCard/ItemCard'
 import ItemFormModal from '../components/ItemFormModal'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import GET_ITEMS_BY_STATUS, { GetItemsByStatus } from '../graphql/queries/get_items_by_status'
 
 const HomePage = () => {
-  const { loading, error, data, refetch } = useQuery<GetItems>(GET_ITEMS)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [statusFilter, setStatusFilter] = useState<FilterType>('all')
+  const { loading, error, data, refetch } = useQuery<GetItemsByStatus>(GET_ITEMS_BY_STATUS, {
+    variables: { status: statusFilter === 'all' ? undefined : statusFilter },
+    fetchPolicy: 'cache-and-network'
+  })
 
   if (error) return <p>Error fetching</p>
 
-  const items = data?.getItems
+  const items = data?.getItemsByStatus
   const noItems = loading === false && items?.length === 0
 
   return (
@@ -36,9 +42,30 @@ const HomePage = () => {
         </button>
       </div>
       {isModalOpen && <ItemFormModal closeModal={() => setIsModalOpen(false)} refetch={refetch} />}
-      <h3 className='text-gray-600 mb-4 text-2xl'>The best to-do list you need.</h3>
 
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+      <Grid container spacing={2}>
+        <Grid size={{ sm: 12, md: 8 }}>
+          <h3 className='text-gray-600 text-2xl'>The best to-do list you need.</h3>
+        </Grid>
+
+        <Grid size={{ sm: 12, md: 4 }}>
+          <FormControl fullWidth>
+            <InputLabel>Filter</InputLabel>
+            <Select
+              data-testid='filter-select'
+              value={statusFilter}
+              label='Filter'
+              onChange={(e) => setStatusFilter(e.target.value as FilterType)}
+            >
+              <MenuItem value={'all'}>Everything</MenuItem>
+              <MenuItem value={'pending'}>Pending</MenuItem>
+              <MenuItem value={'completed'}>Completed</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6'>
         {loading && (
           <>
             {[...Array(4)].map((_, index) => (
@@ -47,7 +74,7 @@ const HomePage = () => {
           </>
         )}
 
-        {noItems && <NoItems />}
+        {noItems && <NoItems setIsModalOpen={setIsModalOpen} statusFilter={statusFilter} />}
 
         {items?.map((item) => (
           <ItemCard key={item.id} item={item} refetch={refetch} />
