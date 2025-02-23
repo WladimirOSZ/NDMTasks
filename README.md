@@ -6,7 +6,7 @@
   - [Requirements](#requirements)
   - [Running the app](#running-the-app)
   - [Tests](#tests)
-  - [Docs and folder structure](#docs-and-folder-structure)
+  - [GraphQL docs and folder structure](#docs-and-folder-structure)
 ---
 
 
@@ -73,5 +73,8 @@ docker compose run frontend bash
 npm test
 ```
 
-## Docs and folder structure
-- [DOC](./doc.md)
+## Folder structure
+- [DOC](/doc/structure.md)
+
+## GraphQL Doc
+- [GraphQL](/doc/graphql.md)
