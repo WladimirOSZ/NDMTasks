@@ -55,7 +55,6 @@ export default tseslint.config(
       'react/jsx-indent-props': [2, 2],
       'object-curly-spacing': ['error', 'always'],
       'space-before-blocks': 'warn',
-      'no-unescaped-entities': 'warn',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
