@@ -1,6 +1,6 @@
 import { Paper, Skeleton } from '@mui/material'
 
-export const TaskCardSkeleton = () => {
+export const ItemCardSkeleton = () => {
 
   return (
     <Paper elevation={3} className='p-4' data-testid='skeleton'>

@@ -39,13 +39,13 @@ const tasksMock = [
           {
             'id': '3',
             'name': 'Third Item',
-            'status': 'complete',
+            'status': 'completed',
             'description': 'Small description'
           },
           {
             'id': '4',
             'name': 'Fourth Item',
-            'status': 'complete',
+            'status': 'completed',
             'description': 'Small description'
           },
         ],
