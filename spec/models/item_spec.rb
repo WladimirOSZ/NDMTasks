@@ -13,7 +13,7 @@ RSpec.describe Item, type: :model do
     expect(build(:item, status: nil)).to_not be_valid
   end
 
-  it 'is not valid with a status other than pending or complete' do
+  it 'is not valid with a status other than pending or completed' do
     expect { build(:item, status: :invalid_status) }.to raise_error(ArgumentError)
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Item, type: :model do
     expect(build(:item, status: :pending)).to be_valid
   end
 
-  it 'is valid with a status of complete' do
-    expect(build(:item, status: :complete)).to be_valid
+  it 'is valid with a status of completed' do
+    expect(build(:item, status: :completed)).to be_valid
   end
 end

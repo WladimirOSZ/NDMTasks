@@ -27,7 +27,7 @@ RSpec.describe 'Get items query', type: :request do
 
     it 'returns the correct fields' do
       create(:item, name: 'Item 1', status: 'pending')
-      create(:item, name: 'Item 2', status: 'complete', created_at: 1.day.ago)
+      create(:item, name: 'Item 2', status: 'completed', created_at: 1.day.ago)
 
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
@@ -39,7 +39,7 @@ RSpec.describe 'Get items query', type: :request do
       )
       expect(data.last).to include(
         'name' => 'Item 2',
-        'status' => 'complete'
+        'status' => 'completed'
       )
     end
 

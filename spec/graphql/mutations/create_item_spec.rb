@@ -39,12 +39,12 @@ RSpec.describe 'Create item mutation', type: :request do
       end
     end
 
-    describe 'with complete status' do
+    describe 'with completed status' do
       let(:variables) do
         {
           input: {
             name: "Item Name",
-            status: 'complete'
+            status: 'completed'
           }
         }
       end
@@ -56,7 +56,7 @@ RSpec.describe 'Create item mutation', type: :request do
 
         expect(data).to include(
           'name' => 'Item Name',
-          'status' => 'complete'
+          'status' => 'completed'
         )
       end
     end

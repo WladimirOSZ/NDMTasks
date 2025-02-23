@@ -18,7 +18,7 @@ RSpec.describe 'Get item by status', type: :request do
     context 'with success' do
       it 'with pending status' do
         create_list(:item, 5, status: 'pending')
-        create_list(:item, 3, status: 'complete')
+        create_list(:item, 3, status: 'completed')
 
         post '/graphql', params: { query: query, variables: { status: 'pending' } }
         json = JSON.parse(response.body)
@@ -28,22 +28,22 @@ RSpec.describe 'Get item by status', type: :request do
         expect(data.first['status']).to eq('pending')
       end
 
-      it 'with complete status' do
+      it 'with completed status' do
         create_list(:item, 5, status: 'pending')
-        create_list(:item, 3, status: 'complete')
+        create_list(:item, 3, status: 'completed')
 
-        post '/graphql', params: { query: query, variables: { status: 'complete' } }
+        post '/graphql', params: { query: query, variables: { status: 'completed' } }
         json = JSON.parse(response.body)
         data = json['data']['getItemsByStatus']
 
         expect(data.size).to eq(3)
-        expect(data.first['status']).to eq('complete')
+        expect(data.first['status']).to eq('completed')
       end
     end
 
     context 'when no items are found' do
       it 'returns an empty list' do
-        create_list(:item, 5, status: 'complete')
+        create_list(:item, 5, status: 'completed')
 
         post '/graphql', params: { query: query, variables: { status: 'pending' } }
         json = JSON.parse(response.body)

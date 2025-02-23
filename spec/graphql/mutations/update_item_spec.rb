@@ -26,7 +26,7 @@ RSpec.describe 'Update item mutation', type: :request do
         id: item.id,
         name: 'Updated item Name',
         description: 'Updated description',
-        status: 'complete'
+        status: 'completed'
       }
 
       post '/graphql', params: { query: query, variables: variables }
@@ -36,7 +36,7 @@ RSpec.describe 'Update item mutation', type: :request do
       expect(data).to include(
         'name' => 'Updated item Name',
         'description' => 'Updated description',
-        'status' => 'complete'
+        'status' => 'completed'
       )
     end
 
@@ -61,7 +61,7 @@ RSpec.describe 'Update item mutation', type: :request do
         id: 0,
         name: 'Updated item Name',
         description: 'Updated description',
-        status: 'complete'
+        status: 'completed'
       }
 
       post '/graphql', params: { query: query, variables: variables }
