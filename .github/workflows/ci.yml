@@ -37,7 +37,18 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
-  test:
+  jest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tests
+        run: |
+          cd front
+          npm install
+          npm test
+
+  backend_test:
     runs-on: ubuntu-latest
 
     services:
