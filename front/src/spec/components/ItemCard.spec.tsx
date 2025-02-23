@@ -1,14 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { ItemCard } from '../../components/ItemCard/ItemCard'
-import { Item } from '../../types/ItemsTypes'
-
-const createItem = (overrides: Partial<Item>): Item => ({
-  id: 1,
-  name: 'Test Title',
-  description: 'Test Description',
-  status: 'pending',
-  ...overrides,
-})
+import { createItem } from '../mocks/itemMocks'
 
 jest.mock('@apollo/client', () => ({
   useMutation: jest.fn(() => [jest.fn(), { loading: false, error: undefined }]),

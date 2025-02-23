@@ -132,10 +132,12 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
           <EditIcon />
           Edit
         </MenuItem>
-        <MenuItem onClick={handleComplete} disableRipple>
-          <DoneAllIcon />
-          {completeLoading ? 'Completing...' : 'Complete'}
-        </MenuItem>
+        {item.status === 'pending' && (
+          <MenuItem onClick={handleComplete} disableRipple>
+            <DoneAllIcon />
+            {completeLoading ? 'Completing...' : 'Complete'}
+          </MenuItem>
+        )}
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleDelete} disableRipple>
           <DeleteIcon />
@@ -143,15 +145,9 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
         </MenuItem>
       </StyledMenu >
 
-      {
-        isEditModalOpen &&
-        <ItemFormModal item={item} refetch={refetch} closeModal={() => setIsEditModalOpen(false)} />
-      }
+      {isEditModalOpen && <ItemFormModal item={item} refetch={refetch} closeModal={() => setIsEditModalOpen(false)} />}
 
-      {
-        isDetailsModalOpen &&
-        <ItemDetailsModal item={item} closeModal={() => setIsDetailsModalOpen(false)} />
-      }
+      {isDetailsModalOpen && <ItemDetailsModal item={item} closeModal={() => setIsDetailsModalOpen(false)} />}
     </>
   )
 }

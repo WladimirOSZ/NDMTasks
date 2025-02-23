@@ -3,7 +3,7 @@ import { Item } from '../types/ItemsTypes';
 import GET_ITEM, { GetItemDetails } from '../graphql/queries/get_item';
 import { useQuery } from '@apollo/client';
 import { CircularProgress } from '@mui/material';
-import { formatDate } from '../helpers/functions';
+import { capitalizeFirstLetter, formatDate } from '../helpers/functions';
 
 type ItemDetailsModalProps = {
   item: Item
@@ -24,6 +24,7 @@ export default function ItemDetailsModal({ item, closeModal }: ItemDetailsModalP
       <div
         className='fixed inset-0 z-[999] grid h-screen w-screen place-items-center backdrop-blur-sm transition-opacity duration-300'
         onClick={closeModal}
+        data-testid='item-details-modal'
       >
         <div
           className='relative m-4 p-6 w-full sm:w-[90%] md:w-[70%] lg:w-[50%] max-w-[700px] rounded-lg bg-white shadow-lg'
@@ -46,16 +47,16 @@ export default function ItemDetailsModal({ item, closeModal }: ItemDetailsModalP
                   <span className='font-semibold'>Description:</span> {item.description}
                 </div>
                 <div>
-                  <span className='font-semibold'>Status:</span> {item.status}
+                  <span className='font-semibold'>Status:</span> {capitalizeFirstLetter(item.status)}
                 </div>
               </div>
               {itemDetails && (
                 <div className='flex flex-col gap-2'>
                   <div>
-                    <span className='font-semibold'>Created At:</span> {formatDate(itemDetails.createdAt)}
+                    <span className='font-semibold'>Created at:</span> {formatDate(itemDetails.createdAt)}
                   </div>
                   <div>
-                    <span className='font-semibold'>Updated At:</span> {formatDate(itemDetails.updatedAt)}
+                    <span className='font-semibold'>Last update:</span> {formatDate(itemDetails.updatedAt)}
                   </div>
                 </div>
               )}

@@ -61,6 +61,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
       <div
         className='fixed inset-0 z-[999] grid h-screen w-screen place-items-center backdrop-blur-sm transition-opacity duration-300'
         onClick={closeModal}
+        data-testid='item-form-modal'
       >
         <div
           className='relative m-4 p-6 w-full sm:w-[90%] md:w-[70%] lg:w-[50%] max-w-[700px] rounded-lg bg-white shadow-lg'
@@ -128,6 +129,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
                            text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700
                            hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2'
               type='submit'
+              data-testid='submit-button'
             >
               {isUpdate ? 'Update' : 'Create'} Task
               {loading && <CircularProgress size={16} className='ms-2' />}
