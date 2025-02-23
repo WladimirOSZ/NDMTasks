@@ -28,7 +28,7 @@ RSpec.describe 'Complete item mutation', type: :request do
       expect(data).to include(
         'name' => item.name,
         'description' => item.description,
-        'status' => 'complete'
+        'status' => 'completed'
       )
     end
   end

@@ -7,7 +7,7 @@ module Mutations
 
     def resolve(id:)
       item = Item.find(id)
-      item.complete!
+      item.completed!
       item
     rescue ActiveRecord::RecordNotFound
       raise GraphQL::ExecutionError, "Item not found"
