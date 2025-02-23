@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Get item by status', type: :request do
   let(:query) do
     <<~GQL
-    query ($status: Status!) {
+    query ($status: Status) {
       getItemsByStatus(status: $status) {
         id
         name
@@ -39,6 +39,17 @@ RSpec.describe 'Get item by status', type: :request do
         expect(data.size).to eq(3)
         expect(data.first['status']).to eq('completed')
       end
+
+      it 'without status returns all items' do
+        create_list(:item, 5, status: 'pending')
+        create_list(:item, 3, status: 'completed')
+
+        post '/graphql', params: { query: query }
+        json = JSON.parse(response.body)
+        data = json['data']['getItemsByStatus']
+
+        expect(data.size).to eq(8)
+      end
     end
 
     context 'when no items are found' do
@@ -59,7 +70,7 @@ RSpec.describe 'Get item by status', type: :request do
         json = JSON.parse(response.body)
         error = json['errors'].first
 
-        expect(error['message']).to eq('Variable $status of type Status! was provided invalid value')
+        expect(error['message']).to eq('Variable $status of type Status was provided invalid value')
       end
     end
   end

@@ -9,7 +9,7 @@ module Types
     end
 
     field :get_items_by_status, [ Types::ItemType ], null: false do
-      argument :status, Types::StatusType, required: true
+      argument :status, Types::StatusType, required: false
     end
 
     def get_items
@@ -22,8 +22,11 @@ module Types
       GraphQL::ExecutionError.new("Item not found.")
     end
 
-    def get_items_by_status(status:)
-      Item.where(status: status)
+    def get_items_by_status(status: nil)
+      if status.nil?
+        return Item.all.order(created_at: :desc)
+      end
+      Item.where(status: status).order(created_at: :desc)
     end
   end
 end
