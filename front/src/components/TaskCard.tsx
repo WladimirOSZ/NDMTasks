@@ -2,16 +2,11 @@ import { Paper } from '@mui/material'
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 
-// ok, so it would be cool to have
-// the timerIcon here, and after it, the TaskAltIcon
-// maybe add a limitDate and make the TimerIcon
-// on red if the limitDate is passed
-
 const taskIcon = (status: 'pending' | 'completed') => {
   if (status === 'pending') {
-    return <TimerOutlinedIcon className='text-blue-600' />
+    return <TimerOutlinedIcon className='text-blue-600' data-testid='pending-icon' />
   }
-  return <TaskAltIcon className='text-green-600' />
+  return <TaskAltIcon className='text-green-600' data-testid='completed-icon' />
 }
 
 type TaskCardProps = {
