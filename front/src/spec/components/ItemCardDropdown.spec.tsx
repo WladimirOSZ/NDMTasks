@@ -34,8 +34,8 @@ describe('ItemCardDropdown', () => {
         <ItemCardDropdown item={item} refetch={refetchMock} />
       )
 
-      const moreButton = screen.getByRole('button', { name: /more/i });
-      fireEvent.click(moreButton);
+      const moreButton = screen.getByRole('button', { name: /more/i })
+      fireEvent.click(moreButton)
 
       const detailsButton = screen.getByText('Details')
       const editButton = screen.getByText('Edit')
@@ -54,8 +54,8 @@ describe('ItemCardDropdown', () => {
         <ItemCardDropdown item={item} refetch={refetchMock} />
       )
 
-      const moreButton = screen.getByRole('button', { name: /more/i });
-      fireEvent.click(moreButton);
+      const moreButton = screen.getByRole('button', { name: /more/i })
+      fireEvent.click(moreButton)
 
       const detailsButton = screen.getByText('Details')
       const editButton = screen.getByText('Edit')
@@ -94,7 +94,7 @@ describe('ItemCardDropdown', () => {
     })
 
     test('calls complete item and refetch when complete is clicked', async () => {
-      const mockCompleteItem = jest.fn();
+      const mockCompleteItem = jest.fn()
       const mockUseMutation = jest.fn(() => [
         mockCompleteItem,
         { loading: false, error: undefined },
@@ -117,7 +117,7 @@ describe('ItemCardDropdown', () => {
     })
 
     test('calls delete item when delete is clicked', async () => {
-      const mockDeleteItem = jest.fn();
+      const mockDeleteItem = jest.fn()
       const mockUseMutation = jest.fn(() => [
         mockDeleteItem,
         { loading: false, error: undefined },

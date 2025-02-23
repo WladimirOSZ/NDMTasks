@@ -1,4 +1,9 @@
 import { gql } from '@apollo/client'
+import { Item } from '../../types/ItemsTypes'
+
+export type GetItems = {
+  getItems: Item[]
+}
 
 const GET_ITEMS = gql`
   query GetItems {

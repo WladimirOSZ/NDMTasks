@@ -2,9 +2,9 @@ import { Paper } from '@mui/material'
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import ItemCardDropdown from './ItemCardDropdown'
-import { Item } from '../../types/ItemsTypes'
+import { Item, ItemStatusType } from '../../types/ItemsTypes'
 
-const taskIcon = (status: 'pending' | 'completed') => {
+const taskIcon = (status: ItemStatusType) => {
   if (status === 'pending') {
     return <TimerOutlinedIcon className='text-blue-600' data-testid='pending-icon' />
   }
