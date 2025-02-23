@@ -17,7 +17,6 @@ type ItemCardProps = {
 }
 
 export const ItemCard = ({ item, refetch }: ItemCardProps) => {
-
   return (
     <Paper elevation={3} className='p-4'>
       <div className='flex flex-row justify-between'>
@@ -28,7 +27,7 @@ export const ItemCard = ({ item, refetch }: ItemCardProps) => {
 
         <ItemCardDropdown item={item} refetch={refetch} />
       </div>
-      <p className='text-gray-600'>{item.description}</p>
+      <p className='text-gray-600 truncate'>{item.description || 'No description provided'}</p>
     </Paper >
   )
 }

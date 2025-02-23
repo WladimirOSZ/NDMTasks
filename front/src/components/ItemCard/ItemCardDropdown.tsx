@@ -12,6 +12,10 @@ import DoneAllIcon from '@mui/icons-material/DoneAll'
 import { Item } from '../../types/ItemsTypes'
 import ItemFormModal from '../ItemFormModal'
 import { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import DELETE_ITEM from '../../graphql/mutations/delete_item'
+import COMPLETE_ITEM from '../../graphql/mutations/complete_item'
+import ItemDetailsModal from '../ItemDetailsModal'
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -60,22 +64,54 @@ type ItemCardDropdownProps = {
 
 export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  }
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const open = Boolean(anchorEl)
+
+  const [deleteItem, { loading }] = useMutation(DELETE_ITEM, {
+    onCompleted: () => {
+      refetch()
+    },
+  })
+
+  const [completeItem, { loading: completeLoading }] = useMutation(COMPLETE_ITEM, {
+    onCompleted: () => {
+      refetch()
+    },
+  })
+
   const handleClose = () => {
     setAnchorEl(null)
   }
   const handleEdit = () => {
-    setIsModalOpen(true)
+    setIsEditModalOpen(true)
     handleClose()
+  }
+
+  const handleDetails = () => {
+    setIsDetailsModalOpen(true)
+    handleClose()
+  }
+
+  const handleDelete = () => {
+    deleteItem({
+      variables: {
+        id: item.id
+      }
+    })
+  }
+
+  const handleComplete = () => {
+    completeItem({
+      variables: {
+        id: item.id
+      }
+    })
   }
 
   return (
     <>
-      <IconButton onClick={handleClick} aria-label='more' aria-controls='dropdown-menu' aria-haspopup='true'>
+      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} aria-label='more' aria-controls='dropdown-menu' aria-haspopup='true'>
         <MoreVertIcon />
       </IconButton>
 
@@ -88,7 +124,7 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleDetails} disableRipple>
           <InfoIcon />
           Details
         </MenuItem>
@@ -96,20 +132,25 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
           <EditIcon />
           Edit
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleComplete} disableRipple>
           <DoneAllIcon />
-          Complete
+          {completeLoading ? 'Completing...' : 'Complete'}
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleDelete} disableRipple>
           <DeleteIcon />
-          Delete
+          {loading ? 'Deleting...' : 'Delete'}
         </MenuItem>
       </StyledMenu >
 
       {
-        isModalOpen &&
-        <ItemFormModal item={item} refetch={refetch} closeModal={() => setIsModalOpen(false)} />
+        isEditModalOpen &&
+        <ItemFormModal item={item} refetch={refetch} closeModal={() => setIsEditModalOpen(false)} />
+      }
+
+      {
+        isDetailsModalOpen &&
+        <ItemDetailsModal item={item} closeModal={() => setIsDetailsModalOpen(false)} />
       }
     </>
   )
