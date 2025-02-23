@@ -74,4 +74,4 @@ npm test
 ```
 
 ## Docs and folder structure
-- [DOC](./doc/doc.MD)
+- [DOC](./doc.md)
