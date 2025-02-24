@@ -6,6 +6,27 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.3.0
+
+## front cfg
+
+ARG NODE_VERSION=20
+
+FROM node:$NODE_VERSION AS client
+
+WORKDIR /rails/front
+
+ENV NODE_ENV=production
+
+# Install node modules
+COPY front/package.json front/package-lock.json ./
+RUN npm install --include=dev
+
+# build client application
+COPY front .
+RUN npm run build
+
+## back cfg
+
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
@@ -51,6 +72,9 @@ FROM base
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
+
+# Copy built client
+COPY --from=client /rails/front/dist /rails/public
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
