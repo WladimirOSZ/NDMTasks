@@ -4,8 +4,10 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 
+const url = import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:3000/graphql'
+
 const client = new ApolloClient({
-  uri: 'https://ndmtasks-production.up.railway.app/graphql',
+  uri: url,
   cache: new InMemoryCache(),
 })
 
