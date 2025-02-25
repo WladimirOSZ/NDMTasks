@@ -3,5 +3,6 @@ FactoryBot.define do
     name { Faker::Book.title }
     description { Faker::Lorem.sentence }
     status { :pending }
+    association :list
   end
 end

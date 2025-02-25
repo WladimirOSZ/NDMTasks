@@ -7,7 +7,8 @@ module Mutations
     type Types::ItemType
 
     def resolve(id:, list_token:)
-      item = List.find_by!(token: list_token).items.find(id)
+      list = List.find_by!(token: list_token)
+      item = list.items.find(id)
       item.destroy
       item
     rescue ActiveRecord::RecordNotFound

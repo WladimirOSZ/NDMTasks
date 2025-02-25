@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Get item query', type: :request do
   let(:query) do
     <<~GQL
-    query ($id: ID!) {
-      getItem(id: $id) {
+    query ($id: ID!, $listToken: String!) {
+      getItem(id: $id, listToken: $listToken) {
         id
         name
         status
@@ -17,7 +17,7 @@ RSpec.describe 'Get item query', type: :request do
   context 'Get a existing item' do
     it 'with success' do
       item = create(:item)
-      variables = { id: item.id }
+      variables = { id: item.id, listToken: item.list.token }
 
       post '/graphql', params: { query: query, variables: variables }
       json = JSON.parse(response.body)
@@ -33,7 +33,19 @@ RSpec.describe 'Get item query', type: :request do
 
   context 'Try to get a item that does not exist' do
     it 'returns an error' do
-      variables = { id: 0 }
+      variables = { id: 0, listToken: 'token' }
+
+      post '/graphql', params: { query: query, variables: variables }
+      json = JSON.parse(response.body)
+
+      expect(json['errors']).not_to be_empty
+    end
+  end
+
+  context 'Try to get a item from a list that does not exist' do
+    it 'returns an error' do
+      item = create(:item)
+      variables = { id: item.id, listToken: 'invalid' }
 
       post '/graphql', params: { query: query, variables: variables }
       json = JSON.parse(response.body)
