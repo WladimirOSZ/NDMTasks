@@ -25,30 +25,31 @@ const HomePage = () => {
   const noItems = loading === false && items?.length === 0
 
   return (
-    <div className='flex flex-col sm:px-2 md:px-4 lg:px-10 py-6'>
-      <div className='flex mb-2'>
+    <div className='flex flex-col px-2 md:px-4 lg:px-10 py-6'>
+      <div className='flex flex-col sm:flex-row md:items-center mb-2 sm:justify-between'>
         <div className='flex items-center gap-2'>
           <AddTaskIcon style={{ fontSize: '36px' }} className='text-blue-600' />
           <h1 className='text-3xl font-bold text-gray-700'>NDMTasks</h1>
           <h1 className='text-3xl text-gray-700'>- Home</h1>
         </div>
+      </div>
+
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4'>
+        <h3 className='text-gray-600 text-2xl'>The best to-do list you need.</h3>
         <button
           onClick={() => setIsModalOpen(true)}
           className='flex items-center gap-1 px-4 py-2 bg-green-600 text-white cursor-pointer
-                     font-semibold rounded-md hover:bg-green-700 focus:outline-none ms-3'
+                 font-semibold rounded-md hover:bg-green-700 focus:outline-none mt-2 sm:mt-0'
         >
           <AddIcon className='text-white' />
           Add task
         </button>
       </div>
+
       {isModalOpen && <ItemFormModal closeModal={() => setIsModalOpen(false)} refetch={refetch} />}
 
       <Grid container spacing={2}>
-        <Grid size={{ sm: 12, md: 8 }}>
-          <h3 className='text-gray-600 text-2xl'>The best to-do list you need.</h3>
-        </Grid>
-
-        <Grid size={{ sm: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel>Filter</InputLabel>
             <Select
@@ -64,7 +65,6 @@ const HomePage = () => {
           </FormControl>
         </Grid>
       </Grid>
-
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6'>
         {loading && (
           <>
