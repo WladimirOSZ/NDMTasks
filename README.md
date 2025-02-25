@@ -40,12 +40,22 @@
 
 ## Running the app
 
-### Docker
+### Setup
+First, copy the .env.example file to .env:
+```bash
+cp .env.example .env
+```
+
+### Running the app
+There's two ways of running the app:
+
+### Option 1. Docker
 ```bash
 docker compose up
 ```
+And the app will be running at `http://localhost:5173`
 
-### Local
+### Option 2. Local
 
 #### Backend
 ```bash
@@ -60,6 +70,8 @@ cd frontend
 npm install
 npm start
 ```
+
+And the app will be running at `http://localhost:5173.`
 
 ## Running Tests
 #### Backend
@@ -94,10 +106,14 @@ cd front
 npm run dev
 ```
 
+Make sure you have cypress installed
+```bash
+npm install cypress
+```
+
 Then, run cypress
 ```bash
-cd front
-npm run cypress
+npx run cypress
 ```
 
 
