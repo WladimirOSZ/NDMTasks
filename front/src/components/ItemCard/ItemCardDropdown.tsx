@@ -4,8 +4,8 @@ import Menu, { MenuProps } from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EditIcon from '@mui/icons-material/Edit'
 import Divider from '@mui/material/Divider'
-import DeleteIcon from '@mui/icons-material/Delete';
-import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete'
+import InfoIcon from '@mui/icons-material/Info'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import DoneAllIcon from '@mui/icons-material/DoneAll'
