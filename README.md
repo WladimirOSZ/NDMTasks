@@ -5,7 +5,7 @@
   - [Stack Summary](#stack-summary)
   - [Requirements](#requirements)
   - [Running the app](#running-the-app)
-  - [Tests](#tests)
+  - [Running Tests](#runing-tests)
   - [GraphQL docs and folder structure](#graphql-docs-and-folder-structure)
 ---
 
@@ -61,7 +61,7 @@ npm install
 npm start
 ```
 
-## Tests
+## Running Tests
 #### Backend
 ```bash
 docker compose run api bash
@@ -72,6 +72,34 @@ bundle exec rspec
 docker compose run frontend bash
 npm test
 ```
+
+### Integration tests (Cypress)
+By the moment, cypress can only be runned with local config.
+Requirements:
+- Node 20
+
+To run Cypress tests, run the app in test environment
+
+
+#### Docker way
+```bash
+RAILS_ENV=test docker compose up
+```
+
+#### Local way
+```bash
+RAILS_ENV=test rails s
+
+cd front
+npm run dev
+```
+
+Then, run cypress
+```bash
+cd front
+npm run cypress
+```
+
 
 ## GraphQL docs and folder structure
 - [DOC](/doc/structure.md)

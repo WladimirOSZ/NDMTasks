@@ -1,10 +1,10 @@
-import { useMutation } from '@apollo/client';
-import CloseIcon from '@mui/icons-material/Close';
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import CREATE_ITEM from '../graphql/mutations/create_item';
-import UPDATE_ITEM from '../graphql/mutations/update_item';
-import { Item } from '../types/ItemsTypes';
+import { useMutation } from '@apollo/client'
+import CloseIcon from '@mui/icons-material/Close'
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import CREATE_ITEM from '../graphql/mutations/create_item'
+import UPDATE_ITEM from '../graphql/mutations/update_item'
+import { Item } from '../types/ItemsTypes'
 
 const getDefaultValues = (item?: Item) => {
   if (!item) return {
@@ -46,6 +46,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
   })
 
   const onSubmit: SubmitHandler<ItemForm> = (data) => {
+    if (loading) return
     createOrUpdateItem({
       variables: {
         id: item?.id,
@@ -68,7 +69,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
           onClick={(e) => e.stopPropagation()}
         >
           <div className='flex shrink-0 items-center justify-between pb-4 text-xl font-medium text-slate-800'>
-            {isUpdate ? 'Update Task' : 'Create a new Task'}
+            <p>{isUpdate ? 'Update Task' : 'Create a new Task'}</p>
             <CloseIcon
               onClick={closeModal}
               className='cursor-pointer text-slate-600 hover:text-slate-800'
@@ -86,6 +87,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
                   fullWidth
                   error={!!errors.name}
                   helperText={errors.name?.message || ''}
+                  data-cy='title-input'
                 />
                 <TextField
                   {...register('description')}
@@ -95,17 +97,18 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
                   multiline
                   rows={4}
                   className='mt-4'
+                  data-cy='description-input'
                 />
 
                 <FormControl fullWidth>
-                  <InputLabel id="status-label">Status</InputLabel>
+                  <InputLabel id='status-label'>Status</InputLabel>
                   <Controller
-                    name="status"
+                    name='status'
                     control={control}
                     render={({ field }) => (
-                      <Select labelId="status-label" {...field} label="Status">
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="completed">Completed</MenuItem>
+                      <Select labelId='status-label' {...field} label='Status'>
+                        <MenuItem value='pending'>Pending</MenuItem>
+                        <MenuItem value='completed'>Completed</MenuItem>
                       </Select>
                     )}
                   />
