@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import LayoutComponent from './components/Layout'
 import HomePage from './pages/HomePage'
+import ListPage from './pages/ListPage'
 
 export const router = createBrowserRouter([
   {
@@ -12,8 +13,8 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'tasks',
-        element: <div>test home</div>,
+        path: '/:token',
+        element: <ListPage />,
       },
     ],
   },

@@ -16,6 +16,7 @@ import { useMutation } from '@apollo/client'
 import DELETE_ITEM from '../../graphql/mutations/delete_item'
 import COMPLETE_ITEM from '../../graphql/mutations/complete_item'
 import ItemDetailsModal from '../ItemDetailsModal'
+import { useParams } from 'react-router-dom'
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -67,6 +68,7 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const open = Boolean(anchorEl)
+  const { token } = useParams<{ token: string }>()
 
   const [deleteItem, { loading }] = useMutation(DELETE_ITEM, {
     onCompleted: () => {
@@ -96,7 +98,8 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
   const handleDelete = () => {
     deleteItem({
       variables: {
-        id: item.id
+        id: item.id,
+        listToken: token
       }
     })
   }
@@ -104,7 +107,8 @@ export default function ItemCardDropdown({ item, refetch }: ItemCardDropdownProp
   const handleComplete = () => {
     completeItem({
       variables: {
-        id: item.id
+        id: item.id,
+        listToken: token
       }
     })
   }

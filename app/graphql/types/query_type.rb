@@ -16,6 +16,10 @@ module Types
       argument :list_token, String, required: true
     end
 
+    field :get_list, Types::ListType, null: false do
+      argument :token, String, required: true
+    end
+
     def get_items(list_token:)
       List.find_by!(token: list_token).items.order(created_at: :desc)
     rescue ActiveRecord::RecordNotFound
@@ -41,5 +45,13 @@ module Types
     rescue ActiveRecord::RecordNotFound
       GraphQL::ExecutionError.new("List not found.")
     end
+
+    def get_list(token:)
+      list = List.find_by!(token: token)
+      list
+    rescue ActiveRecord::RecordNotFound
+      GraphQL::ExecutionError.new("List not found.")
+    end
+
   end
 end
