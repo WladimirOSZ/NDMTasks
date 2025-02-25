@@ -113,6 +113,8 @@ npm install cypress
 
 Then, run cypress
 ```bash
+cd front
+npm install
 npx run cypress
 ```
 
