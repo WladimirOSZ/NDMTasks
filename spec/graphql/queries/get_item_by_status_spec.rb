@@ -87,7 +87,7 @@ RSpec.describe 'Get item by status', type: :request do
           json = JSON.parse(response.body)
           error = json['errors'].first
 
-          expect(error['message']).to eq('List not found.')
+          expect(error['message']).to eq('List not found')
         end
       end
     end

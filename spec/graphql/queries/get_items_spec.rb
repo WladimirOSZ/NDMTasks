@@ -69,7 +69,7 @@ RSpec.describe 'Get items query', type: :request do
 
   context 'when the list does not exist' do
     it 'returns an error' do
-      post '/graphql', params: { query: query, variables: { listToken: 'invalid' } }
+      post '/graphql', params: { query: query, variables: { listToken: 'invalid' } }, as: :json
       json = JSON.parse(response.body)
 
       expect(json['errors']).not_to be_empty
