@@ -1,65 +1,17 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import HomePage from '../../pages/HomePage'
 import { MockedProvider } from '@apollo/client/testing'
-import GET_ITEMS_BY_STATUS from '../../graphql/queries/get_items_by_status'
+import { listMock } from '../mocks/graphqlMocks'
 
-const emptyMock = [
-  {
-    request: {
-      query: GET_ITEMS_BY_STATUS,
-    },
-    result: {
-      data: {
-        getItemsByStatus: [],
-      },
-    },
-  },
-]
-
-const tasksMock = [
-  {
-    request: {
-      query: GET_ITEMS_BY_STATUS,
-    },
-    result: {
-      data: {
-        getItemsByStatus: [
-          {
-            'id': '1',
-            'name': 'First Item',
-            'status': 'pending',
-            'description': 'Small description'
-          },
-          {
-            'id': '2',
-            'name': 'Second Item',
-            'status': 'pending',
-            'description': 'Small description'
-          },
-          {
-            'id': '3',
-            'name': 'Third Item',
-            'status': 'completed',
-            'description': 'Small description'
-          },
-          {
-            'id': '4',
-            'name': 'Fourth Item',
-            'status': 'completed',
-            'description': 'Small description'
-          },
-        ],
-      },
-    },
-  },
-]
+jest.mock('react-router', () => ({
+  useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
+  useNavigate: jest.fn().mockReturnValue(() => { })
+}))
 
 describe('HomePage', () => {
   test('renders the page title', async () => {
     render(
-      <MockedProvider mocks={emptyMock}>
-        <HomePage />
-      </MockedProvider>
+      <HomePage />
     )
 
     const title = screen.getByText('NDMTasks')
@@ -69,50 +21,56 @@ describe('HomePage', () => {
     expect(subtitle).toBeInTheDocument()
   })
 
-  describe('when loading tasks', () => {
-    test('renders skeleton', () => {
+  describe('when there is a list token', () => {
+    jest.mock('react-router', () => ({
+      useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
+    }))
+
+    test('redirects to list page', async () => {
       render(
-        <MockedProvider mocks={emptyMock}>
+        <MockedProvider mocks={[listMock]}>
           <HomePage />
         </MockedProvider>
       )
+      const navigate = jest.fn()
 
-      const skeleton = screen.getAllByTestId('skeleton')
-
-      expect(skeleton).toHaveLength(4)
-    })
-  })
-
-
-  describe('when there are no tasks', () => {
-    describe('and filter is all', () => {
-      test('renders "No tasks yet" message', async () => {
-        render(
-          <MockedProvider mocks={emptyMock}>
-            <HomePage />
-          </MockedProvider>
-        )
-
-        const noTasks = await screen.findByText('No tasks yet. Create one!')
-
-        expect(noTasks).toBeInTheDocument()
+      waitFor(() => {
+        expect(navigate).toHaveBeenCalled()
       })
     })
   })
 
-  describe('when there are tasks', () => {
-    test('renders tasks', async () => {
+  describe('when there is no list token', () => {
+    jest.mock('react-router', () => ({
+      useParams: jest.fn().mockReturnValue({ token: '' }),
+    }))
+
+    test('stay on the page', async () => {
       render(
-        <MockedProvider mocks={tasksMock} addTypename={false}>
+        <HomePage />
+      )
+      const navigate = jest.fn()
+
+      waitFor(() => {
+        expect(navigate).not.toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('when clicking on the create list button', () => {
+    test('opens the modal', async () => {
+      render(
+        <MockedProvider mocks={[]}>
           <HomePage />
         </MockedProvider>
       )
 
-      const firstTask = await screen.findByText('First Item')
-      const fourthTask = await screen.findByText('Fourth Item')
+      const createListButton = screen.getAllByText('Create a new list')[0]
+      createListButton.click()
 
-      expect(firstTask).toBeInTheDocument()
-      expect(fourthTask).toBeInTheDocument()
+      const modalTitle = await screen.findByText('First, create a new List')
+
+      expect(modalTitle).toBeInTheDocument()
     })
   })
 })

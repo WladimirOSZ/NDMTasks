@@ -6,5 +6,6 @@ module Types
     field :update_item, mutation: Mutations::UpdateItem
     field :delete_item, mutation: Mutations::DeleteItem
     field :complete_item, mutation: Mutations::CompleteItem
+    field :create_list, mutation: Mutations::CreateList
   end
 end

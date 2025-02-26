@@ -3,13 +3,14 @@ import { FilterType } from '../types/ItemsTypes'
 
 type NoItemsProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-  statusFilter: FilterType
+  statusFilter: FilterType | 'noList'
 }
 
 const statusMessages = {
   all: 'No tasks yet. Create one!',
   pending: 'No pending tasks. Well done!',
-  completed: 'No completed tasks. Keep going!'
+  completed: 'No completed tasks. Keep going!',
+  noList: 'Create a new list to start adding tasks.'
 }
 
 export const NoItems = ({ setIsModalOpen, statusFilter }: NoItemsProps) => {
@@ -19,14 +20,14 @@ export const NoItems = ({ setIsModalOpen, statusFilter }: NoItemsProps) => {
         <p className='text-gray-600 text-lg'>
           {statusMessages[statusFilter]}
         </p>
-        {statusFilter === 'all' && (
+        {(statusFilter === 'all' || statusFilter == 'noList') && (
           <button
             onClick={() => setIsModalOpen(true)}
             className='flex items-center gap-1 px-4 py-2 bg-green-600 text-white cursor-pointer
                    font-semibold rounded-md hover:bg-green-700 focus:outline-none ms-3'
           >
             <AddIcon className='text-white' />
-            Add task
+            {statusFilter === 'noList' ? 'Create a new list' : 'Add task'}
           </button>
         )}
       </div>

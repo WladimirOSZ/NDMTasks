@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { NoItems } from '../../components/NoItems'
 
-
 describe('NoTask', () => {
   test('displays no tasks yet when there are no tasks', () => {
     render(

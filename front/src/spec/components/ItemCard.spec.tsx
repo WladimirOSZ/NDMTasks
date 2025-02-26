@@ -6,6 +6,10 @@ jest.mock('@apollo/client', () => ({
   useMutation: jest.fn(() => [jest.fn(), { loading: false, error: undefined }]),
   gql: jest.fn((str) => str),
 }))
+jest.mock('react-router', () => ({
+  useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
+}))
+
 const refetchMock = jest.fn()
 
 describe('ItemCard', () => {

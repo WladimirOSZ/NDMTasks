@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Update item mutation', type: :request do
   let(:query) do
     <<~GQL
-    mutation($id: ID!, $name: String, $description: String, $status: Status) {
+    mutation($id: ID!, $name: String, $description: String, $status: Status, $listToken: String!) {
       updateItem(input: {
         id: $id,
         name: $name,
         description: $description,
         status: $status,
+        listToken: $listToken
       }) {
         id
         name
@@ -20,38 +21,59 @@ RSpec.describe 'Update item mutation', type: :request do
   end
 
   context 'updating a existing item' do
-    it 'updates with success' do
-      item = create(:item)
-      variables = {
-        id: item.id,
-        name: 'Updated item Name',
-        description: 'Updated description',
-        status: 'completed'
-      }
+    context 'with valid parameters' do
+      it 'creates a item' do
+        item = create(:item)
+        variables = {
+          id: item.id,
+          name: 'Updated item Name',
+          description: 'Updated description',
+          status: 'completed',
+          listToken: item.list.token
+        }
 
-      post '/graphql', params: { query: query, variables: variables }
-      json = JSON.parse(response.body)
-      data = json['data']['updateItem']
+        post '/graphql', params: { query: query, variables: variables }
+        json = JSON.parse(response.body)
+        data = json['data']['updateItem']
 
-      expect(data).to include(
-        'name' => 'Updated item Name',
-        'description' => 'Updated description',
-        'status' => 'completed'
-      )
+        expect(data).to include(
+          'name' => 'Updated item Name',
+          'description' => 'Updated description',
+          'status' => 'completed'
+        )
+      end
     end
 
-    it 'with invalid data' do
-      item = create(:item)
-      variables = {
-        id: item.id,
-        name: nil,
-        status: 'invalid status'
-      }
+    context 'with invalid data' do
+      it 'without name return errors' do
+        item = create(:item)
+        variables = {
+          id: item.id,
+          name: nil,
+          status: 'invalid status',
+          listToken: item.list.token
+        }
 
-      post '/graphql', params: { query: query, variables: variables }, as: :json
-      json = JSON.parse(response.body)
+        post '/graphql', params: { query: query, variables: variables }, as: :json
+        json = JSON.parse(response.body)
 
-      expect(json['errors']).not_to be_empty
+        expect(json['errors']).not_to be_empty
+      end
+
+      it 'without list token return errors' do
+        item = create(:item)
+        variables = {
+          id: item.id,
+          name: 'Updated item Name',
+          status: 'completed',
+          listToken: nil
+        }
+
+        post '/graphql', params: { query: query, variables: variables }, as: :json
+        json = JSON.parse(response.body)
+
+        expect(json['errors']).not_to be_empty
+      end
     end
   end
 
@@ -61,7 +83,8 @@ RSpec.describe 'Update item mutation', type: :request do
         id: 0,
         name: 'Updated item Name',
         description: 'Updated description',
-        status: 'completed'
+        status: 'completed',
+        listToken: nil
       }
 
       post '/graphql', params: { query: query, variables: variables }

@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Get item by status', type: :request do
   let(:query) do
     <<~GQL
-    query ($status: Status) {
-      getItemsByStatus(status: $status) {
+    query ($status: Status, $listToken: String!) {
+      getItemsByStatus(status: $status, listToken: $listToken) {
         id
         name
         status
@@ -13,14 +13,16 @@ RSpec.describe 'Get item by status', type: :request do
     }
     GQL
   end
+  let(:list) { create(:list) }
 
   context 'Get items filtered by status' do
     context 'with success' do
       it 'with pending status' do
-        create_list(:item, 5, status: 'pending')
-        create_list(:item, 3, status: 'completed')
+        create_list(:item, 5, status: 'pending', list: list)
+        create_list(:item, 3, status: 'completed', list: list)
 
-        post '/graphql', params: { query: query, variables: { status: 'pending' } }
+        variables = { status: 'pending', listToken: list.token }
+        post '/graphql', params: { query: query, variables: variables }
         json = JSON.parse(response.body)
         data = json['data']['getItemsByStatus']
 
@@ -29,10 +31,11 @@ RSpec.describe 'Get item by status', type: :request do
       end
 
       it 'with completed status' do
-        create_list(:item, 5, status: 'pending')
-        create_list(:item, 3, status: 'completed')
+        create_list(:item, 5, status: 'pending', list: list)
+        create_list(:item, 3, status: 'completed', list: list)
 
-        post '/graphql', params: { query: query, variables: { status: 'completed' } }
+        variables = { status: 'completed', listToken: list.token }
+        post '/graphql', params: { query: query, variables: variables }
         json = JSON.parse(response.body)
         data = json['data']['getItemsByStatus']
 
@@ -41,10 +44,10 @@ RSpec.describe 'Get item by status', type: :request do
       end
 
       it 'without status returns all items' do
-        create_list(:item, 5, status: 'pending')
-        create_list(:item, 3, status: 'completed')
+        create_list(:item, 5, status: 'pending', list: list)
+        create_list(:item, 3, status: 'completed', list: list)
 
-        post '/graphql', params: { query: query }
+        post '/graphql', params: { query: query, variables: { listToken: list.token } }
         json = JSON.parse(response.body)
         data = json['data']['getItemsByStatus']
 
@@ -54,9 +57,10 @@ RSpec.describe 'Get item by status', type: :request do
 
     context 'when no items are found' do
       it 'returns an empty list' do
-        create_list(:item, 5, status: 'completed')
+        create_list(:item, 5, status: 'completed', list: list)
 
-        post '/graphql', params: { query: query, variables: { status: 'pending' } }
+        variables = { status: 'pending', listToken: list.token }
+        post '/graphql', params: { query: query, variables: { status: 'pending', listToken: list.token } }
         json = JSON.parse(response.body)
         data = json['data']['getItemsByStatus']
 
@@ -64,13 +68,27 @@ RSpec.describe 'Get item by status', type: :request do
       end
     end
 
-    context 'when the status is invalid' do
-      it 'returns an error message' do
-        post '/graphql', params: { query: query, variables: { status: 'invalid' } }
-        json = JSON.parse(response.body)
-        error = json['errors'].first
+    context 'with errors' do
+      context 'when the status is invalid' do
+        it 'returns an error message' do
+          variables = { status: 'invalid', listToken: list.token }
+          post '/graphql', params: { query: query, variables: variables }
+          json = JSON.parse(response.body)
+          error = json['errors'].first
 
-        expect(error['message']).to eq('Variable $status of type Status was provided invalid value')
+          expect(error['message']).to eq('Variable $status of type Status was provided invalid value')
+        end
+      end
+
+      context 'when the list does not exist' do
+        it 'returns an error message' do
+          variables = { status: 'pending', listToken: 'invalid' }
+          post '/graphql', params: { query: query, variables: variables }
+          json = JSON.parse(response.body)
+          error = json['errors'].first
+
+          expect(error['message']).to eq('List not found')
+        end
       end
     end
   end

@@ -6,8 +6,8 @@ export type GetItemsByStatus = {
 }
 
 const GET_ITEMS_BY_STATUS = gql`
-  query GetItemsByStatus($status: Status) {
-    getItemsByStatus(status: $status) {
+  query GetItemsByStatus($status: Status, $listToken: String!) {
+    getItemsByStatus(status: $status, listToken: $listToken) {
       id
       name
       status

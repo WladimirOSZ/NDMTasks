@@ -5,9 +5,16 @@ const CREATE_ITEM = gql`
     $id: ID!
     $name: String!
     $description: String
-    $status: Status
+    $status: Status,
+    $listToken: String!
   ){
-    updateItem(input: { id: $id, name: $name, description: $description, status: $status }) {
+    updateItem(input: {
+      id: $id,
+      name: $name,
+      description: $description,
+      status: $status,
+      listToken: $listToken
+    }) {
       id
       name
       status

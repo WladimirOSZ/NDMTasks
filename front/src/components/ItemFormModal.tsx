@@ -5,6 +5,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import CREATE_ITEM from '../graphql/mutations/create_item'
 import UPDATE_ITEM from '../graphql/mutations/update_item'
 import { Item } from '../types/ItemsTypes'
+import { useParams } from 'react-router-dom'
 
 const getDefaultValues = (item?: Item) => {
   if (!item) return {
@@ -36,6 +37,7 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
   const { register, handleSubmit, control, formState: { errors }, } = useForm({
     defaultValues: getDefaultValues(item)
   })
+  const { token } = useParams<{ token: string }>()
   const isUpdate = Boolean(item)
 
   const [createOrUpdateItem, { loading }] = useMutation(isUpdate ? UPDATE_ITEM : CREATE_ITEM, {
@@ -52,7 +54,8 @@ export default function ItemFormModal({ item, closeModal, refetch }: ItemFormMod
         id: item?.id,
         name: data.name,
         description: data.description,
-        status: data.status
+        status: data.status,
+        listToken: token
       }
     })
   }

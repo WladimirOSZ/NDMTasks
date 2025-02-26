@@ -1,4 +1,4 @@
-import { Item } from "../../types/ItemsTypes"
+import { Item } from '../../types/ItemsTypes'
 
 export const createItem = (overrides: Partial<Item>): Item => ({
   id: 1,

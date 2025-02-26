@@ -1,13 +1,23 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import ItemCardDropdown from '../../components/ItemCard/ItemCardDropdown'
 import { createItem } from '../mocks/itemMocks'
+import { MockedProvider } from '@apollo/client/testing'
+import { completeItemMock, deleteItemMock } from '../mocks/graphqlMocks'
 
-jest.mock('@apollo/client', () => ({
-  useMutation: jest.fn(() => [jest.fn(), {}]),
-  useQuery: jest.fn(() => ({})),
-  gql: jest.fn((str) => str),
-}))
+jest.mock('@apollo/client', () => {
+  const apollo = jest.requireActual('@apollo/client')
+  return {
+    ...apollo,
+    useMutation: jest.fn(() => [jest.fn(), {}]),
+    useQuery: jest.fn(() => ({})),
+    gql: apollo.gql,
+  }
+})
+
 const refetchMock = jest.fn()
+jest.mock('react-router', () => ({
+  useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
+}))
 
 describe('ItemCardDropdown', () => {
   describe('Menu items presence', () => {
@@ -28,7 +38,7 @@ describe('ItemCardDropdown', () => {
       expect(deleteButton).toBeNull()
     })
 
-    test('renders the dropdown items whe open', () => {
+    test('renders the dropdown items when open', () => {
       const item = createItem({})
       render(
         <ItemCardDropdown item={item} refetch={refetchMock} />
@@ -94,47 +104,35 @@ describe('ItemCardDropdown', () => {
     })
 
     test('calls complete item and refetch when complete is clicked', async () => {
-      const mockCompleteItem = jest.fn()
-      const mockUseMutation = jest.fn(() => [
-        mockCompleteItem,
-        { loading: false, error: undefined },
-      ])
-      jest.mock('@apollo/client', () => ({
-        useMutation: mockUseMutation,
-        useQuery: jest.fn(() => ({})),
-        gql: jest.fn((str) => str),
-      }))
       const item = createItem({})
 
-      render(<ItemCardDropdown item={item} refetch={refetchMock} />)
+      render(
+        <MockedProvider mocks={[completeItemMock]}>
+          <ItemCardDropdown item={item} refetch={refetchMock} />
+        </MockedProvider>
+      )
       fireEvent.click(screen.getByRole('button', { name: /more/i }))
       fireEvent.click(screen.getByText('Complete'))
 
       waitFor(() => {
-        expect(mockCompleteItem).toHaveBeenCalled()
+        expect(completeItemMock).toHaveBeenCalled()
         expect(refetchMock).toHaveBeenCalled()
       })
     })
 
     test('calls delete item when delete is clicked', async () => {
-      const mockDeleteItem = jest.fn()
-      const mockUseMutation = jest.fn(() => [
-        mockDeleteItem,
-        { loading: false, error: undefined },
-      ])
-      jest.mock('@apollo/client', () => ({
-        useMutation: mockUseMutation,
-        useQuery: jest.fn(() => ({})),
-        gql: jest.fn((str) => str),
-      }))
       const item = createItem({})
 
-      render(<ItemCardDropdown item={item} refetch={refetchMock} />)
+      render(
+        <MockedProvider mocks={[deleteItemMock]}>
+          <ItemCardDropdown item={item} refetch={refetchMock} />
+        </MockedProvider>
+      )
       fireEvent.click(screen.getByRole('button', { name: /more/i }))
       fireEvent.click(screen.getByText('Delete'))
 
       waitFor(() => {
-        expect(mockDeleteItem).toHaveBeenCalled()
+        expect(deleteItemMock).toHaveBeenCalled()
       })
     })
   })

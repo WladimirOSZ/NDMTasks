@@ -2,10 +2,8 @@ Cypress.Commands.add('visitHomePage', () => {
   cy.visit('http://localhost:5173')
 })
 
-Cypress.Commands.add('verifyHomePageTitles', () => {
-  cy.get('h1').contains('NDMTasks').should('exist')
-  cy.get('h1').contains('- Home').should('exist')
-  cy.get('h3').contains('The best to-do list you need.').should('exist')
+Cypress.Commands.add('visitListPage', (token) => {
+  cy.visit('http://localhost:5173/' + token)
 })
 
 Cypress.Commands.add('interceptEmptyTasks', () => {
@@ -21,6 +19,13 @@ Cypress.Commands.add('createTask', (title, description) => {
   cy.get('[data-cy="title-input"]').type(title)
   if (description) cy.get('[data-cy="description-input"]').type(description)
   cy.get('button').contains('Create Task').click()
+})
+
+Cypress.Commands.add('createList', (title) => {
+  cy.visitHomePage()
+  cy.contains('Create a new list').click()
+  cy.get('[data-cy="list-title-input"]').type(title)
+  cy.get('button').contains('Create List').click()
 })
 
 Cypress.Commands.add('performTaskAction', (action) => {
