@@ -1,9 +1,10 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Item } from '../types/ItemsTypes';
-import GET_ITEM, { GetItemDetails } from '../graphql/queries/get_item';
-import { useQuery } from '@apollo/client';
-import { CircularProgress } from '@mui/material';
-import { capitalizeFirstLetter, formatDate } from '../helpers/functions';
+import CloseIcon from '@mui/icons-material/Close'
+import { Item } from '../types/ItemsTypes'
+import GET_ITEM, { GetItemDetails } from '../graphql/queries/get_item'
+import { useQuery } from '@apollo/client'
+import { CircularProgress } from '@mui/material'
+import { capitalizeFirstLetter, formatDate } from '../helpers/functions'
+import { useParams } from 'react-router-dom'
 
 type ItemDetailsModalProps = {
   item: Item
@@ -11,8 +12,9 @@ type ItemDetailsModalProps = {
 }
 
 export default function ItemDetailsModal({ item, closeModal }: ItemDetailsModalProps) {
+  const { token } = useParams<{ token: string }>()
   const { loading, error, data } = useQuery<GetItemDetails>(GET_ITEM, {
-    variables: { id: item.id }
+    variables: { id: item.id, listToken: token }
   })
 
   if (loading) return <CircularProgress />

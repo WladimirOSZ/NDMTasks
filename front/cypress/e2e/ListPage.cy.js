@@ -75,5 +75,17 @@ describe('ListPage', () => {
         cy.contains('h3', 'Test task').should('not.exist')
       })
     })
+
+    context('Task details', () => {
+      it('See details of a task', () => {
+        cy.createTask('Test task', 'Task description')
+        cy.performTaskAction('Details')
+        cy.contains('h3', 'Test task').should('exist')
+        cy.contains('p', 'Task description').should('exist')
+        cy.contains('Status: Pending').should('exist')
+        cy.contains('Created at:').should('exist')
+        cy.contains('Last update:').should('exist')
+      })
+    })
   })
 })

@@ -5,7 +5,10 @@ import { createItem } from '../mocks/itemMocks'
 
 jest.mock('@apollo/client', () => ({
   useQuery: jest.fn(() => getItemMock),
-  gql: jest.fn((str) => str),
+  gql: jest.fn((str) => str)
+}))
+jest.mock('react-router', () => ({
+  useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
 }))
 
 describe('ItemDetailsModal', () => {

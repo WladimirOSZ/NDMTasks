@@ -8,8 +8,8 @@ export type GetItemDetails = {
 }
 
 const GET_ITEM = gql`
-  query GetItem ($id: ID!, $token: String!) {
-    getItem (id: $id, token: $token) {
+  query GetItem ($id: ID!, $listToken: String!) {
+    getItem (id: $id, listToken: $listToken) {
       createdAt
       updatedAt
     }
