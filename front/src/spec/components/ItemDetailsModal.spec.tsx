@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import ItemDetailsModal from '../../components/ItemDetailsModal'
-import { mockGetItem } from '../mocks/graphqlMocks'
+import { getItemMock } from '../mocks/graphqlMocks'
 import { createItem } from '../mocks/itemMocks'
 
 jest.mock('@apollo/client', () => ({
-  useQuery: jest.fn(() => mockGetItem),
+  useQuery: jest.fn(() => getItemMock),
   gql: jest.fn((str) => str),
 }))
 

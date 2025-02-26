@@ -68,7 +68,7 @@ export default function ListFormModal({ closeModal }: ListFormModal) {
                   fullWidth
                   error={!!errors.name}
                   helperText={errors.name?.message || ''}
-                  data-cy='title-input'
+                  data-cy='list-title-input'
                 />
               </div>
             </form>

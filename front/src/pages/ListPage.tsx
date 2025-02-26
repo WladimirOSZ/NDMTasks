@@ -10,7 +10,7 @@ import ItemFormModal from '../components/ItemFormModal'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import GET_ITEMS_BY_STATUS, { GetItemsByStatus } from '../graphql/queries/get_items_by_status'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import GET_LIST, { getList } from '../graphql/queries/get_list'
 
 const ListPage = () => {
@@ -27,6 +27,12 @@ const ListPage = () => {
   const { loading: loadingGetList, error: errorGetList, data: dataGetList } = useQuery<getList>(GET_LIST, {
     variables: { token: token }
   })
+  const navigate = useNavigate()
+
+  if (errorGetList && errorGetList.message.includes('List not found')) {
+    // TODO: Give the user a feedback on why this happened
+    navigate('/')
+  }
 
   if (error || errorGetList) return <p>Error fetching</p>
 

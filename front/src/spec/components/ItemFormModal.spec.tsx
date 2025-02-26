@@ -9,6 +9,9 @@ jest.mock('@apollo/client', () => ({
   useMutation: jest.fn(() => [jest.fn(), {}]),
   gql: jest.fn((str) => str),
 }))
+jest.mock('react-router', () => ({
+  useParams: jest.fn().mockReturnValue({ token: 'MOCK1' }),
+}))
 
 describe('ItemFormModal', () => {
   describe('Creating a new item', () => {
