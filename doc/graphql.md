@@ -3,10 +3,68 @@
 
 ## Queries and Mutations
 
+### Create a List
+```graphql
+mutation {
+  createList(input: { name: "List Name"}) {
+    id
+    name
+    token
+  }
+}
+```
+
+Variables:
+Name: String
+
+Return: [ListType](#listtype)
+```json
+{
+  "data": {
+    "createList": {
+      "id": "1",
+      "name": "List Name",
+      "token": "ABC12"
+    }
+  }
+}
+```
+
+### Get a List
+```graphql
+query {
+  getList(token: "ABC12") {
+    id
+    name
+  }
+}
+```
+
+Variables:
+Token: String
+
+Return: [ListType](#listtype)
+```json
+{
+  "data": {
+    "getList": {
+      "id": "1",
+      "name": "List Name"
+    }
+  }
+}
+```
+
+
 ### Create Item
 ```graphql
 mutation {
-  createItem(input: { name: "Item name", description: "Item Description", status: completed}) {
+  createItem(input: {
+      name: "Item name",
+      description: "Item Description",
+      status: completed,
+      listToken: "ABC12"
+    }) {
     id
     name
 		status
@@ -36,7 +94,7 @@ Return: [ItemType](#itemtype)
 ### Update Item
 ```graphql
 mutation {
-  updateItem(input: { id: 1, name: "New Name"}) {
+  updateItem(input: { id: 1, name: "New Name", listToken: "ABC12"}) {
     id
     name
 		status
@@ -68,7 +126,7 @@ Return: [ItemType](#itemtype)
 ### Delete Item
 ```graphql
 mutation {
-  deleteItem(input: { id: 3}) {
+  deleteItem(input: { id: 3, listToken: "ABC12"}) {
     id
     name
 		status
@@ -97,7 +155,7 @@ Return: [ItemType](#itemtype)
 ### Get Item
 ```graphql
 query {
-  getItem(id: 1) {
+  getItem(id: 1, listToken: "ABC12") {
     id
     name
     status
@@ -126,7 +184,7 @@ Return: [ItemType](#itemtype)
 ### Get Items
 ```graphql
 query {
-  getItems {
+  getItems (listToken: "ABC12") {
     id
     name
     status
@@ -160,7 +218,7 @@ Return: [ItemType[]](#itemtype)
 ### Get Items By Status
 ```graphql
 query {
-  getItemsByStatus(status: completed) {
+  getItemsByStatus(status: completed, listToken: "ABC12") {
     id
     name
     status
@@ -207,4 +265,9 @@ Status: [StatusType](#statustype)
 ### StatusType
 ```graphql
 Enum: completed, pending
+```
+
+### ListType
+```graphql
+Id: ID
 ```

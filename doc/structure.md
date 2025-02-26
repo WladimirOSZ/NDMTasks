@@ -9,33 +9,42 @@ lib
 ├── graphql
 │   ├── mutations
 │   │   ├── base_mutation.rb
-│   │   ├── complete_item.rb
+│   │   ├── create_list.rb
 │   │   ├── create_item.rb
+│   │   ├── complete_item.rb
 │   │   ├── delete_item.rb
 │   │   └── update_item.rb
 │   └── types
 │       ├── item_type.rb
 │       ├── status_type.rb
+│       ├── list_type.rb
 │       └── ...
 ├── models
 │   ├── item.rb
-│   └── ...
+│   └── list.rb
+├── services
+│   └── record_finder.rb
+
 
 test
 ├── factories
-│   └── items.rb
+│   ├── items.rb
+│   └── lists.rb
 ├── graphql
 │   ├── mutations
 │   │   ├── complete_item_spec.rb
 │   │   ├── create_item_spec.rb
+│   │   ├── create_list_spec.rb
 │   │   ├── delete_item_spec.rb
 │   │   └── update_item_spec.rb
 │   └── queries
 │       ├── get_item_by_status_spec.rb
 │       ├── get_item_spec.rb
-│       └── get_items_spec.rb
+│       ├── get_items_spec.rb
+│       └── get_list_spec.rb
 ├── models
-│   └── item_spec.rb
+│   ├── item_spec.rb
+│   └── list_spec.rb
 ├── rails_helper.rb
 └── spec_helper.rb
 ```

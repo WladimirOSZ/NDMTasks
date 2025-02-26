@@ -15,8 +15,8 @@ RSpec.describe 'Create item mutation', type: :request do
   end
   let(:list) { create(:list) }
 
-  context 'with valid parameters' do
-    describe 'with pending status' do
+  describe 'with valid parameters' do
+    context 'with pending status' do
       let(:variables) do
         {
           input: {
@@ -41,7 +41,7 @@ RSpec.describe 'Create item mutation', type: :request do
       end
     end
 
-    describe 'with completed status' do
+    context 'with completed status' do
       let(:variables) do
         {
           input: {
@@ -65,16 +65,16 @@ RSpec.describe 'Create item mutation', type: :request do
     end
   end
 
-  context 'with invalid parameters' do
+  describe 'with invalid parameters' do
     context 'without name' do
-    it 'return errors' do
-      variables = { status: 'pending', listToken: list.token }
-      post '/graphql', params: { query: query, variables: variables }
-      json = JSON.parse(response.body)
+      it 'return errors' do
+        variables = { status: 'pending', listToken: list.token }
+        post '/graphql', params: { query: query, variables: variables }
+        json = JSON.parse(response.body)
 
-      expect(json['errors']).not_to be_empty
+        expect(json['errors']).not_to be_empty
+      end
     end
-  end
 
     context 'without list token' do
       it 'return errors' do

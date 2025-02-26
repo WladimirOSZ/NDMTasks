@@ -1,4 +1,6 @@
 class List < ApplicationRecord
+  validates :name, presence: true
+
   has_many :items
 
   before_create :generate_token
